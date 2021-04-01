@@ -13,21 +13,3 @@ app.listen(PORT, () => {
   console.log(`Started on ${PORT}`);
 });
 
-process.on('exit', () => {
-  console.log('Goodbye!');
-  pool.end();
-});
-
-appAWS.use(bodyParser.urlencoded({ extended: false }));  
-appAWS.use(bodyParser.json());
-
-appAWS.get('/', (req, res) => {
-    // call sesClient to send an email
-    sesClient.sendEmail('user@example.com', "Hey! Welcome", "This is the body of email");
-    
-    res.send('Email is sent!');
-});
-
-appAWS.listen(3000, () => {
-    console.log('App is listening on port 3000');
-});

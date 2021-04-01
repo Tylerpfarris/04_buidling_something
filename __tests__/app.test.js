@@ -1,7 +1,8 @@
 const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const Book = require('../lib/models/Books');
- 
+const request  = require('supertest');
+const app = require('../lib/app');
 
 
 describe('04_build_something routes', () => {
@@ -9,52 +10,66 @@ describe('04_build_something routes', () => {
     return setup(pool);
   });
 
+  const book = { author: 'xyz', genre: 'fiction', pages: 666, quantity: 1 };
+
+  const dbBook = { author: 'xyz', genre: 'fiction', pages: 666, quantity: 1, id: "1" }
+  
   it('creates a new book in our database and sends a conformation email', async () => {
-
-   const book = await Book.insert({ author: 'xyz', genre: 'fiction', pages: 666, quantity: 1 });
-
-    expect(book).toEqual(book);
+    const res = await request(app)
+      .post('/api/v1/books')
+      .send(book)
+    
+    expect(res.body).toEqual(dbBook);
+      
   });
 
   it('gets all books in the books DB', async () => {
     
-    const book = await Book.insert({ author: 'xyz', genre: 'fiction', pages: 666, quantity: 1 });
+   Book.insert(book);
 
-    const result = await Book.getAllBooks();
+    const result = await request(app)
+      .get('/api/v1/books')
+    
 
-    expect(result).toEqual(book);
+    expect(result.body).toEqual([dbBook]);
   });
 
   it('gets a book by its id', async () => {
+   await Book.insert(book);
+    const result = await request(app)
+      .get('/api/v1/books/1')
 
-    const book = await Book.insert({ author: 'xyz', genre: 'fiction', pages: 666, quantity: 1 });
-    
-    const result = await Book.getBookById(1);
-
-    expect(result).toEqual(book);
+    expect(result.body).toEqual(dbBook);
   })
 
   it('updates a book selected by id in book DB', async () => {
 
-    Book.insert({ author: 'xyz', genre: 'fiction', pages: 666, quantity: 1 });
+   await Book.insert(book);
     
-    const updatedBook = await Book.updatedBookById('Abc', 'Non-fiction', 420, 2, 1);
-
-    const result = await Book.getBookById(1);
-
-    expect(result).toEqual(updatedBook);
+    const updatedBook = { author: 'ABC', genre: 'NON-fiction', pages: 420, quantity: 66 }
+    await request(app)
+      .put('/api/v1/books/1')
+      .send(updatedBook)
+    
+    const result = await Book.getById(1);
+    const newUpdateBook = {
+      ...updatedBook,
+      id: '1'
+    }
+    expect(result).toEqual(newUpdateBook);
   })
 
   it('deletes a book selected by id in book DB', async () => {
+    await Book.insert(book);
+
+   
     
-    const result = await Book.insert({ author: 'xyz', genre: 'fiction', pages: 666, quantity: 1 });
+    await request(app)
+      .delete('/api/v1/books/1')
+    
+    const bookDB = await Book.getAll();
 
-    await Book.insert({ author: 'ABC', genre: 'NON-fiction', pages: 420, quantity: 66 })
-    await Book.deleteBookById(2)
-
-    const bookDB = await Book.getAllBooks();
-
-    expect(bookDB).toEqual(result);
+    expect(bookDB).toEqual([]);
   })
 
 });
