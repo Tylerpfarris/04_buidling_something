@@ -1,7 +1,6 @@
 require('dotenv').config();
-const AWS = require('aws-sdk');
 
-
+const SES = require('aws-sdk/clients/ses')
 
 const SES_CONFIG = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -9,7 +8,7 @@ const SES_CONFIG = {
     region: process.env.AWS_SES_REGION,
 };
 
-const AWS_SES = new AWS.SES(SES_CONFIG);
+
 
 let sendDeleteEmail = ({recipientEmail, name, title, quantity}) => {
     let params = {
@@ -34,7 +33,8 @@ let sendDeleteEmail = ({recipientEmail, name, title, quantity}) => {
         }
       },
     };
-    return AWS_SES.sendDeleteEmail(params).promise();
+  return new SES(SES_CONFIG).sendEmail(params).promise();
+
 };
 
 let sendInsertEmail = ({ recipientEmail, name }, author,  title, quantity) => {
@@ -60,7 +60,8 @@ let sendInsertEmail = ({ recipientEmail, name }, author,  title, quantity) => {
         }
       },
     };
-    return AWS_SES.sendInsertEmail(params).promise();
+
+   return new SES(SES_CONFIG).sendEmail(params).promise();
 };
 
 let sendUpdateEmail = ({ recipientEmail, name }, author,  title, quantity) => {
@@ -86,7 +87,8 @@ let sendUpdateEmail = ({ recipientEmail, name }, author,  title, quantity) => {
         }
       },
     };
-    return AWS_SES.sendUpdateEmail(params).promise();
+
+   return new SES(SES_CONFIG).sendEmail(params).promise();
 };
 
 let sendTemplateEmail = (recipientEmail) => {
@@ -100,7 +102,7 @@ let sendTemplateEmail = (recipientEmail) => {
       },
       TemplateData: '{ \"name\':\'John Doe\'}'
     };
-    return AWS_SES.sendTemplatedEmail(params).promise();
+     return new SES(SES_CONFIG).sendEmail(params).promise();
 };
 
 module.exports = {

@@ -2,7 +2,7 @@ const app = require('./lib/app');
 const pool = require('./lib/utils/pool');
 
 const express = require('express');
-const bodyParser = require('body-parser');
+
 const appAWS = express();
 const sesClient = require('./ses-client');
 
