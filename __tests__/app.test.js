@@ -6,25 +6,30 @@ const app = require('../lib/app');
 
 
 
-// jest.mock('aws-sdk/clients/ses', () => {
-//   const mSES = {
-//     sendEmail: jest.fn().mockReturnThis(),
-//     promise: jest.fn()
+jest.mock('aws-sdk/clients/ses', () => {
+  const mSES = {
+    sendEmail: jest.fn().mockReturnThis(),
+    promise: jest.fn()
 
-//   };
-//   return jest.fn(() => mSES);
-// });
+  };
+  return jest.fn(() => mSES);
+});
 
 describe('04_build_something routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
+  
+  // afterAll(done => {
+  //   pool.end()
+    
+  // })
 
   const book = { author: 'xyz', title: 'stuff', genre: 'fiction', pages: 666, quantity: 1 };
 
   const dbBook = { author: 'xyz', title: 'stuff', genre: 'fiction', pages: 666, quantity: 1, id: "1" }
   
-  it('creates a new book in our database and sends a conformation email', async () => {
+  it.only('creates a new book in our database and sends a conformation email', async () => {
     const res = await request(app)
       .post('/api/v1/books')
       .send(book)
