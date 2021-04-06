@@ -10,7 +10,7 @@ const SES_CONFIG = {
 
 
 
-let sendDeleteEmail = ({recipientEmail, name, title, quantity}) => {
+let sendDeleteEmail = ({ recipientEmail, name }, title, quantity) => {
     let params = {
       Source: process.env.AWS_EMAIL,
       Destination: {
