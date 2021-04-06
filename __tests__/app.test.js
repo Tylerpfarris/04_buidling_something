@@ -6,14 +6,14 @@ const app = require('../lib/app');
 
 
 
-jest.mock('aws-sdk', () => {
-  const mSES = {
-    sendEmail: jest.fn().mockReturnThis(),
-    promise: jest.fn()
-    // then: ()=>{}
-  };
-  return jest.fn(() => mSES);
-});
+// jest.mock('aws-sdk/clients/ses', () => {
+//   const mSES = {
+//     sendEmail: jest.fn().mockReturnThis(),
+//     promise: jest.fn()
+
+//   };
+//   return jest.fn(() => mSES);
+// });
 
 describe('04_build_something routes', () => {
   beforeEach(() => {
