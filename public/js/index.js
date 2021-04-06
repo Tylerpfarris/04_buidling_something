@@ -3,11 +3,22 @@
 
 const appendBook = (book) => {
     const bookLi = document.createElement('li');
+    const deleteButton = document.createElement('button')
+    deleteButton.classList.add('deleteButtonOnLi')
+    deleteButton.textContent = 'Delete'
+    
+    deleteButton.addEventListener('click', (e) => {
+        const id = book.id
+        console.log(res)
+        fetch(`http://localhost:7890/api/v1/books/${id}`, {
+            method: 'DELETE'
+        })
+            .then(res => res.json())
+    });
     bookLi.textContent = `${book.author} - ${book.title} - ${book.genre} - ${book.pages} - ${book.quantity}`
-    book
     bookUl.appendChild(bookLi)
+    bookLi.append(deleteButton)
 };
-
 
 
 const h1 = document.querySelector('h1');
@@ -82,11 +93,13 @@ bookForm.addEventListener('submit', (e) => {
 
 
   
-fetch('http://localhost:7890/api/v1/books')
+fetch('http://localhost:7890/api/v1/books/')
     .then((res) => res.json())
     .then((books) => {
         books.forEach(appendBook);
     });
+
+
 
 
 
