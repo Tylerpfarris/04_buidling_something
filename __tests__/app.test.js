@@ -5,6 +5,7 @@ const request  = require('supertest');
 const app = require('../lib/app');
 
 
+
 jest.mock('aws-sdk', () => {
   const mSES = {
     sendEmail: jest.fn().mockReturnThis(),
@@ -70,9 +71,6 @@ describe('04_build_something routes', () => {
 
   it('deletes a book selected by id in book DB', async () => {
     await Book.insert(book);
-
-   
-    
     await request(app)
       .delete('/api/v1/books/1')
     
@@ -81,4 +79,6 @@ describe('04_build_something routes', () => {
     expect(bookDB).toEqual([]);
   })
 
+  
 });
+

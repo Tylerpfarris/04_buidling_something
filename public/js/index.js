@@ -6,14 +6,16 @@ const appendBook = (book) => {
     const deleteButton = document.createElement('button')
     deleteButton.classList.add('deleteButtonOnLi')
     deleteButton.textContent = 'Delete'
-    
+
+
     deleteButton.addEventListener('click', (e) => {
         const id = book.id
-        console.log(res)
+        
         fetch(`http://localhost:7890/api/v1/books/${id}`, {
             method: 'DELETE'
         })
-            .then(res => res.json())
+        console.log(res)
+            .then(res => res.text())
     });
     bookLi.textContent = `${book.author} - ${book.title} - ${book.genre} - ${book.pages} - ${book.quantity}`
     bookUl.appendChild(bookLi)
@@ -59,6 +61,9 @@ const quantityInput = document.createElement('input');
 quantityInput.type = 'number';
 quantityInput.placeholder = 'Quantity';
 quantityInput.name = 'quantity'
+
+
+
 
 const formSubmitButton = document.createElement('button');
 formSubmitButton.textContent = 'Submit';
