@@ -85,3 +85,4 @@ describe('04_build_something routes', () => {
  
 });
 
+// DATABASE_URL=postgres://tylerfarris:Abby420@localhost:5432/postgres2
